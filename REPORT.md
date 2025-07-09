@@ -41,6 +41,9 @@
 
 ![Firefox](image-2.png)
 
+ping https://jsonplaceholder.typicode.com/todos
+![alt text](image-7.png)
+
 ## Предложения по улучшению тестов
 
 -
