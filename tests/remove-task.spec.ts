@@ -12,4 +12,5 @@ test('test', async ({ page }) => {
   await expect(page.getByText(taskToDelete)).toBeVisible({
     visible: false,
   });
+  await page.close();
 });
