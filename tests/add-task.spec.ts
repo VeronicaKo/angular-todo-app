@@ -1,14 +1,18 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from './base-test';
 
-test('Add task', async ({ page }) => {
+test('TS00001 - Add task', async ({ todoPage }) => {
   const taskName = `new task ${Date.now()}`;
 
-  await page.goto(`/`);
-  await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('heading', { name: 'Todo List' })).toBeVisible();
-  await page.locator('.task-input').fill(taskName);
-  await expect(page.locator('.task-input')).toHaveValue(taskName);
-  await page.locator('.add-button').click();
-  await expect(page.getByText(taskName)).toBeVisible();
-  await page.close();
+  await expect(todoPage.heading).toBeVisible();
+  const task = await todoPage.addTask(taskName);
+  await expect(task).toBeVisible();
+});
+
+test('TS00006 - Add task with long title', async ({ todoPage }) => {
+  const taskLongTitle =
+    '888888888888888888888888888888888888888888888888888888888888888888';
+
+  await expect(todoPage.heading).toBeVisible();
+  const task = await todoPage.addTask(taskLongTitle);
+  await expect(task).toHaveScreenshot('task-long-title.png');
 });

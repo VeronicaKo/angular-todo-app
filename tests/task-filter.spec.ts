@@ -1,17 +1,18 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from './base-test';
 
-test('Task filter', async ({ page }) => {
+test('TS00004 - Task filter', async ({ todoPage }) => {
   const activeTask = 'quis ut nam facilis et officia qui';
   const completedTask = 'illo est ratione doloremque quia maiores aut';
 
-  await page.goto(`/`);
-  await page.waitForLoadState('networkidle');
-  await page.getByRole('button', { name: 'Active' }).click();
-  await expect(page.getByText(activeTask)).toBeVisible();
-  await page.getByRole('button', { name: 'Completed' }).click();
-  await expect(page.getByText(completedTask)).toBeVisible();
-  await page.getByRole('button', { name: 'All' }).click();
-  await expect(page.getByText(activeTask)).toBeVisible();
-  await expect(page.getByText(completedTask)).toBeVisible();
-  await page.close();
+  await todoPage.filterTasks('Active');
+  await expect(todoPage.getTask(activeTask)).toBeVisible();
+  await expect(todoPage.getTask(completedTask)).toBeHidden();
+
+  await todoPage.filterTasks('Completed');
+  await expect(todoPage.getTask(activeTask)).toBeHidden();
+  await expect(todoPage.getTask(completedTask)).toBeVisible();
+
+  await todoPage.filterTasks('All');
+  await expect(todoPage.getTask(activeTask)).toBeVisible();
+  await expect(todoPage.getTask(completedTask)).toBeVisible();
 });

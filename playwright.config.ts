@@ -36,8 +36,8 @@ export default defineConfig({
 
   expect: {
     toHaveScreenshot: {
-      maxDiffPixels: 100, // Глобальный лимит различий в пикселях
-      animations: 'disabled', // Отключаем анимации глобально
+      maxDiffPixels: 100,
+      animations: 'disabled',
       threshold: 0.2,
     },
   },
