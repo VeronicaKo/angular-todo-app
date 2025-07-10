@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
-  let taskToDelete = 'delectus aut autem';
+test('Remove task', async ({ page }) => {
+  const taskToDelete = 'delectus aut autem';
+
   await page.goto(`/`);
   await page.waitForLoadState('networkidle');
   await expect(page.getByText(taskToDelete)).toBeVisible();

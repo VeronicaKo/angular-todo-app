@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('Add task', async ({ page }) => {
-  let taskName = `new task ${Date.now()}`;
+  const taskName = `new task ${Date.now()}`;
+
   await page.goto(`/`);
   await page.waitForLoadState('networkidle');
   await expect(page.getByRole('heading', { name: 'Todo List' })).toBeVisible();

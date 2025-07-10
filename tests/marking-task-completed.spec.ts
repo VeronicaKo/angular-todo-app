@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('Marking a task as completed', async ({ page }) => {
   const taskToEdit = 'quis ut nam facilis et officia qui';
+
   await page.goto('/');
   await page.waitForLoadState('networkidle');
   const taskCheckbox = page

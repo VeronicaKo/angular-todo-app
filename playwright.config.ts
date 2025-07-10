@@ -30,6 +30,16 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure', // Автоматические скриншоты при падении
+    viewport: { width: 1280, height: 800 }, // Фиксированный размер окна
+  },
+
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixels: 100, // Глобальный лимит различий в пикселях
+      animations: 'disabled', // Отключаем анимации глобально
+      threshold: 0.2,
+    },
   },
 
   /* Configure projects for major browsers */
