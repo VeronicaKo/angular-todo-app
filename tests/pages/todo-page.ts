@@ -11,6 +11,8 @@ export class TodoPage {
   readonly filterActive: Locator;
   readonly filterCompleted: Locator;
   readonly filterAll: Locator;
+  readonly editNameInput: Locator;
+  readonly saveButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,6 +25,8 @@ export class TodoPage {
     this.filterActive = page.getByRole('button', { name: 'Active' });
     this.filterCompleted = page.getByRole('button', { name: 'Completed' });
     this.filterAll = page.getByRole('button', { name: 'All' });
+    this.editNameInput = page.locator('.edit-input');
+    this.saveButton = page.getByRole('button', { name: 'Save' });
   }
 
   async goto() {
@@ -56,6 +60,14 @@ export class TodoPage {
     return task;
   }
 
+  async editTask(taskName: string, newTaskName: string) {
+    const task = this.getTask(taskName);
+    await task.locator('.edit-button').click();
+    await this.editNameInput.fill(newTaskName);
+    await this.saveButton.click();
+    return this.getTask(newTaskName);
+  }
+
   async filterTasks(filter: 'Active' | 'Completed' | 'All') {
     switch (filter) {
       case 'Active':
@@ -68,5 +80,21 @@ export class TodoPage {
         await this.filterAll.click();
     }
     await this.page.waitForLoadState('networkidle');
+  }
+
+  async checkPostRequestCount(taskName: string, requestCount: number) {
+    let postRequestCount = 0;
+
+    this.page.on('request', (request) => {
+      if (request.method() === 'POST' && request.url().includes('/todos')) {
+        postRequestCount++;
+      }
+    });
+
+    await this.addTask(taskName);
+
+    await this.page.waitForTimeout(500);
+
+    expect(postRequestCount).toBe(requestCount);
   }
 }
