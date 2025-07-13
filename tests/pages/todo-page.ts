@@ -29,6 +29,10 @@ export class TodoPage {
     this.saveButton = page.getByRole('button', { name: 'Save' });
   }
 
+  async waitForAPIDelay() {
+    await this.page.waitForTimeout(2000);
+  }
+
   async goto() {
     await this.page.goto('/');
     await this.page.waitForLoadState('networkidle');
@@ -38,6 +42,7 @@ export class TodoPage {
   async addTask(taskName: string) {
     await this.taskInput.fill(taskName);
     await this.addButton.click();
+    await this.waitForAPIDelay();
     return this.getTask(taskName);
   }
 
@@ -65,6 +70,7 @@ export class TodoPage {
     await task.locator('.edit-button').click();
     await this.editNameInput.fill(newTaskName);
     await this.saveButton.click();
+    await this.waitForAPIDelay();
     return this.getTask(newTaskName);
   }
 

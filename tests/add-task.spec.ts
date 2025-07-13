@@ -29,6 +29,6 @@ test.skip(
   'TS00008 - Add task with the same title',
   {},
   async ({ todoPage }) => {
-    // TODO реализовать после уточения требований
+    // TODO реализовать после уточнения требований
   }
 );
