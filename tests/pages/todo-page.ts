@@ -11,8 +11,14 @@ export class TodoPage {
   readonly filterActive: Locator;
   readonly filterCompleted: Locator;
   readonly filterAll: Locator;
+
+  readonly editButton: string;
+  readonly deleteButton: string;
+  readonly taskCheckbox: string;
   readonly editNameInput: Locator;
   readonly saveButton: Locator;
+
+  readonly taskTitle: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,15 +28,22 @@ export class TodoPage {
     this.addButton = page.locator('.add-button');
     this.taskList = page.locator('.task-list');
     this.taskItem = page.locator('.task-item');
+
     this.filterActive = page.getByRole('button', { name: 'Active' });
     this.filterCompleted = page.getByRole('button', { name: 'Completed' });
     this.filterAll = page.getByRole('button', { name: 'All' });
+
+    this.editButton = '.edit-button';
+    this.deleteButton = '.delete-button';
+    this.taskCheckbox = '.task-checkbox';
     this.editNameInput = page.locator('.edit-input');
     this.saveButton = page.getByRole('button', { name: 'Save' });
+
+    this.taskTitle = page.locator('.task-title');
   }
 
   async waitForAPIDelay() {
-    await this.page.waitForTimeout(2000);
+    await await this.page.waitForTimeout(2000);
   }
 
   async goto() {
@@ -46,28 +59,35 @@ export class TodoPage {
     return this.getTask(taskName);
   }
 
-  getTask(taskName: string) {
-    return this.page.locator(
-      `.task-content:has(.task-title:has-text("${taskName}"))`
-    );
+  getTask(taskName: string): Locator {
+    return this.page.locator('.task-item', {
+      has: this.page.getByText(taskName),
+    });
   }
 
-  async markTaskAsCompleted(taskName: string) {
-    const task = this.getTask(taskName);
-    const checkbox = task.locator('.task-checkbox');
-    await checkbox.check();
-    return task;
+  getTaskCheckbox(taskName: string): Locator {
+    return this.getTask(taskName).locator(this.taskCheckbox);
+  }
+
+  getTaskTitle(taskName: string): Locator {
+    return this.getTask(taskName).locator('.task-title');
+  }
+
+  // Упрощаем markTask
+  async markTask(taskName: string) {
+    await this.getTaskCheckbox(taskName).check();
+    await this.waitForAPIDelay();
   }
 
   async removeTask(taskName: string) {
     const task = this.getTask(taskName);
-    await task.locator('.delete-button').click();
+    await task.locator(this.editButton).click();
     return task;
   }
 
   async editTask(taskName: string, newTaskName: string) {
     const task = this.getTask(taskName);
-    await task.locator('.edit-button').click();
+    await task.locator(this.editButton).click();
     await this.editNameInput.fill(newTaskName);
     await this.saveButton.click();
     await this.waitForAPIDelay();

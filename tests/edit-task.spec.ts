@@ -23,4 +23,5 @@ test.skip('TS00010 - Edit task with empty title', {}, async ({ todoPage }) => {
   await expect(todoPage.getTask(taskToEdit)).toBeVisible();
   await todoPage.editTask(taskToEdit, '');
   // TODO реализовать после уточения требований
+  // await expect(todoPage.getTask(taskToEdit)).toBeVisible();
 });
