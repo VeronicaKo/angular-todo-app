@@ -1,5 +1,11 @@
 import { Locator, Page, expect } from '@playwright/test';
 
+export enum FilterType {
+  ACTIVE = 'Active',
+  COMPLETED = 'Completed',
+  ALL = 'All',
+}
+
 export class TodoPage {
   readonly page: Page;
 
@@ -37,7 +43,7 @@ export class TodoPage {
     this.deleteButton = '.delete-button';
     this.taskCheckbox = '.task-checkbox';
     this.editNameInput = page.locator('.edit-input');
-    this.saveButton = page.getByRole('button', { name: 'Save' });
+    this.saveButton = page.locator('.save-button');
 
     this.taskTitle = page.locator('.task-title');
   }
@@ -89,17 +95,18 @@ export class TodoPage {
     const task = this.getTask(taskName);
     await task.locator(this.editButton).click();
     await this.editNameInput.fill(newTaskName);
+    this.waitForDelay();
     await this.saveButton.click();
     await this.waitForDelay();
     return this.getTask(newTaskName);
   }
 
-  async filterTasks(filter: 'Active' | 'Completed' | 'All') {
+  async filterTasks(filter: FilterType) {
     switch (filter) {
-      case 'Active':
+      case FilterType.ACTIVE:
         await this.filterActive.click();
         break;
-      case 'Completed':
+      case FilterType.COMPLETED:
         await this.filterCompleted.click();
         break;
       default:
