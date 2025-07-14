@@ -9,7 +9,7 @@ test('TS00009 - Edit task', async ({ todoPage, apiService }) => {
   await expect(todoPage.getTask(taskToEdit)).not.toBeVisible();
   await expect(todoPage.getTask(newTaskName)).toBeVisible();
 
-  todoPage.waitForAPIDelay();
+  todoPage.waitForDelay();
   const existsOld = await apiService.taskExists(taskToEdit);
   expect(existsOld).toBe(false);
 
@@ -22,6 +22,6 @@ test.skip('TS00010 - Edit task with empty title', {}, async ({ todoPage }) => {
 
   await expect(todoPage.getTask(taskToEdit)).toBeVisible();
   await todoPage.editTask(taskToEdit, '');
-  // TODO реализовать после уточения требований
+  // TODO реализовать после уточнения требований
   // await expect(todoPage.getTask(taskToEdit)).toBeVisible();
 });

@@ -42,8 +42,9 @@ export class TodoPage {
     this.taskTitle = page.locator('.task-title');
   }
 
-  async waitForAPIDelay() {
-    await await this.page.waitForTimeout(2000);
+  async waitForDelay() {
+    //ожидание ответа API
+    await this.page.waitForTimeout(2000);
   }
 
   async goto() {
@@ -55,7 +56,7 @@ export class TodoPage {
   async addTask(taskName: string) {
     await this.taskInput.fill(taskName);
     await this.addButton.click();
-    await this.waitForAPIDelay();
+    await this.waitForDelay();
     return this.getTask(taskName);
   }
 
@@ -73,10 +74,9 @@ export class TodoPage {
     return this.getTask(taskName).locator('.task-title');
   }
 
-  // Упрощаем markTask
   async markTask(taskName: string) {
     await this.getTaskCheckbox(taskName).check();
-    await this.waitForAPIDelay();
+    await this.waitForDelay();
   }
 
   async removeTask(taskName: string) {
@@ -90,7 +90,7 @@ export class TodoPage {
     await task.locator(this.editButton).click();
     await this.editNameInput.fill(newTaskName);
     await this.saveButton.click();
-    await this.waitForAPIDelay();
+    await this.waitForDelay();
     return this.getTask(newTaskName);
   }
 

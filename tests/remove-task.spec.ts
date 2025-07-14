@@ -7,7 +7,7 @@ test('TS00003 - Remove task', async ({ todoPage, apiService }) => {
   await todoPage.removeTask(taskToDelete);
   await expect(todoPage.getTask(taskToDelete)).toBeHidden();
 
-  todoPage.waitForAPIDelay();
+  todoPage.waitForDelay();
   const exists = await apiService.taskExists(taskToDelete);
   expect(exists).toBe(false);
 });
